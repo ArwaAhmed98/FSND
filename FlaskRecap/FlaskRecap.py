@@ -30,4 +30,5 @@ def greeting_add():
     if('lang' not in info or 'greeting' not in info):
         abort(422)
     greetings[info['lang']] = info['greeting']
+    print("arwaaaaaaaaaaaaaaaaaaa")
     return jsonify({'greetings':greetings})
