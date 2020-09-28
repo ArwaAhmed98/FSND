@@ -140,6 +140,7 @@ class TriviaTestCase(unittest.TestCase):
         response = self.client().post('/actors/99999' )
         self.assertEqual(response.status_code,404)
         self.assertEqual(data['success'],False)
+        self.assertEqual(data['message'] ,'Resource is not found')
 
     def edit_moviess(self):
         new_movie={

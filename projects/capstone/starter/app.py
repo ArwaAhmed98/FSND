@@ -14,7 +14,7 @@ def create_app(test_config=None):
     response.headers.add('Access-Control-Allow-Headers','Content-Type,authorization,True')
     response.headers.add('Acess-Control-Allow-Methods' , 'GET,POST,PATCH,DELETE,OPTIONS')
     return response
-
+  db_drop_and_create_all()
   @app.route('/actors')
   def get_all_actors():
     Actors = Actor.query.all()
