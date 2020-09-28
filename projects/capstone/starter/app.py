@@ -53,7 +53,7 @@ def create_app(test_config=None):
 
   @app.route('/movie/<int:id>' , methods=['DELETE'])
   #@requires_auth('delete:movie')
-  def delete_movie(token , id):
+  def delete_movie(id):
     try:
       x=Movie.query.filter_by(id==id).one_or_none()
       if x is None:
