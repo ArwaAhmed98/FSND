@@ -1,6 +1,7 @@
 import os
-from sqlalchemy import Column, String, Integer, create_engine ,DateTime ,Date,db
 from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy import Column, String, Integer, create_engine ,DateTime ,Date,db
+
 import json
 
 database_name = "castingagency"
