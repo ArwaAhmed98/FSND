@@ -34,7 +34,6 @@ def create_app(test_config=None):
     }),200
 
   @app.route('/actors/<int:id>' , methods=['DELETE'])
- #@requires_auth('delete:actors')
   def delete_actor(id):
     try:
       x=Actor.query.filter_by(id==id).one_or_none()
@@ -52,7 +51,6 @@ def create_app(test_config=None):
       abort(422)
 
   @app.route('/movie/<int:id>' , methods=['DELETE'])
-  #@requires_auth('delete:movie')
   def delete_movie(id):
     try:
       x=Movie.query.filter_by(id==id).one_or_none()
@@ -71,7 +69,6 @@ def create_app(test_config=None):
 
   
   @app.route('/actors' , methods=['POST'])
-  #@requires_auth('post:actors')
   def  post_actor():
     #fetch the body data from the request body 
     body = request.get_json()
@@ -86,8 +83,10 @@ def create_app(test_config=None):
       "success" : True,
       "actors" : [Actor.format()]
     }),200
+
+
+
   @app.route('/movies' , methods=['POST'])
-  #@requires_auth('post:movies')
   def  post_movie():
 
     #fetch the body data from the request body 
@@ -107,7 +106,6 @@ def create_app(test_config=None):
 
 
   @app.route('/actors/<int:id>' , methods =['PATCH'])
-  #@requires_auth('patch:actors')
   def edit_actors(id):
     #fetch the body data from the request body 
     body = request.get_json()
@@ -138,7 +136,6 @@ def create_app(test_config=None):
 
 
   @app.route('/movies/<int:id>' , methods =['PATCH'])
-  #@requires_auth('patch:movies')
   def edit_movies(id):
     #fetch the body data from the request body 
     body = request.get_json()
