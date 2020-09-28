@@ -26,7 +26,11 @@ class TriviaTestCase(unittest.TestCase):
             # create all tables
             self.db.create_all()
             #give the attribuites of the class any values
-        self.new_Q={ 
+        self.new_actor={ 
+            'name':'Adel Emam' ,
+            'age' :50,
+            'gender' : 'Male' }
+
           }
     def tearDown(self):
         """Executed after reach test"""
