@@ -3,7 +3,7 @@ from flask import Flask, request, abort, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
 
-from models import setup_db, Actor, Movie
+from models.py import setup_db, Actor, Movie
 def create_app(test_config=None):
   # create and configure the app
   app = Flask(__name__)
@@ -34,8 +34,8 @@ def create_app(test_config=None):
     }),200
 
   @app.route('/actors/<int:id>' , methods=['DELETE'])
-  @requires_auth('delete:actors')
-  def delete_actor(token ,id):
+ #@requires_auth('delete:actors')
+  def delete_actor(id):
     try:
       x=Actor.query.filter_by(id==id).one_or_none()
       if x is None:
@@ -52,7 +52,7 @@ def create_app(test_config=None):
       abort(422)
 
   @app.route('/movie/<int:id>' , methods=['DELETE'])
-  @requires_auth('delete:movie')
+  #@requires_auth('delete:movie')
   def delete_movie(token , id):
     try:
       x=Movie.query.filter_by(id==id).one_or_none()
@@ -71,8 +71,8 @@ def create_app(test_config=None):
 
   
   @app.route('/actors' , methods=['POST'])
-  @requires_auth('post:actors')
-  def  post_actor(token):
+  #@requires_auth('post:actors')
+  def  post_actor():
     #fetch the body data from the request body 
     body = request.get_json()
     requested_name = body.get('name')
@@ -87,8 +87,8 @@ def create_app(test_config=None):
       "actors" : [Actor.format()]
     }),200
   @app.route('/movies' , methods=['POST'])
-  @requires_auth('post:movies')
-  def  post_actor(token):
+  #@requires_auth('post:movies')
+  def  post_actor():
 
     #fetch the body data from the request body 
 
@@ -107,7 +107,7 @@ def create_app(test_config=None):
 
 
   @app.route('/actors/<int:id>' , methods =['PATCH'])
-  @requires_auth('patch:actors')
+  #@requires_auth('patch:actors')
   def edit_actors(id):
     #fetch the body data from the request body 
     body = request.get_json()

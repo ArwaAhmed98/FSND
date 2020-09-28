@@ -2,10 +2,8 @@ import os
 import unittest
 import json
 from flask_sqlalchemy import SQLAlchemy
-
-from flaskr import create_app
-from models import setup_db, Question, Category
-
+from sqlalchemy import Column, String, Integer, create_engine ,DateTime ,Date,db ,create_app
+from models import setup_db, Actor ,Movie
 
 class TriviaTestCase(unittest.TestCase):
     """This class represents the trivia test case"""
@@ -31,7 +29,7 @@ class TriviaTestCase(unittest.TestCase):
             'age' :50,
             'gender' : 'Male' }
 
-          }
+          
     def tearDown(self):
         """Executed after reach test"""
         pass
@@ -49,8 +47,8 @@ class TriviaTestCase(unittest.TestCase):
         self.assertTrue(data['Actors'])
         
     def test_404_get_all_actors(self):
-        res=self.client().get('/actors/22') 
-         #Check that 404 not found will pop up for a fake data 
+        res=self.client().get('/actors') 
+        #Check that 404 not found will pop up for a fake data 
         data=json.loads(res.data)
         self.assertEqual(res.status_code,404)
         self.assertEqual(data['success'], False)
