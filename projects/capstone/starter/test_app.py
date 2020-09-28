@@ -61,13 +61,13 @@ class TriviaTestCase(unittest.TestCase):
         self.assertEqual(res.status_code,200)
         self.assertEqual(data['success'],True)
         self.assertTrue(data['movies'])
-        
+
     def delete_actor_failure(self):
         res=self.client().get('/actors/99999')
         data=json.loads(res.data)
-        self.assertEqual(res.status_code,422)
+        self.assertEqual(res.status_code,404)
         self.assertEqual(data['success'],False)
-        self.assertTrue(data['movies'])
+        self.assertTrue(data['id'])
 
         
 # Make the tests conveniently executable
