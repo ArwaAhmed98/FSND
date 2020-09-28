@@ -3,8 +3,8 @@ from flask import Flask, request, abort, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
 
-from models import setup_db, Actor, Movie
-from .database.models import db_drop_and_create_all
+from models import setup_db, Actor, Movie , db_drop_and_create_all
+
 def create_app(test_config=None):
   # create and configure the app
   app = Flask(__name__)
