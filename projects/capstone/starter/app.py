@@ -88,7 +88,7 @@ def create_app(test_config=None):
     }),200
   @app.route('/movies' , methods=['POST'])
   #@requires_auth('post:movies')
-  def  post_actor():
+  def  post_movie():
 
     #fetch the body data from the request body 
 
