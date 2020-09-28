@@ -1,9 +1,9 @@
 import os
-from sqlalchemy import Column, String, Integer, create_engine ,DateTime ,Date
+from sqlalchemy import Column, String, Integer, create_engine ,DateTime ,Date,db
 from flask_sqlalchemy import SQLAlchemy
 import json
 
-database_name = "trivia"
+database_name = "castingagency"
 database_path = "postgres://{}/{}".format('localhost:5432', database_name)
 
 db = SQLAlchemy()
@@ -20,20 +20,19 @@ def setup_db(app, database_path=database_path):
     db.create_all()
 
 '''
-Actors
+                                                    Actors
 
 '''
-class Actors(db.Model):
-
-
-        
+class Actor(db.Model):    
     __tablename__ = 'Actor'
 
     id = Column(Integer, primary_key=True)
     name = Column(String)
     age = Column(Integer)
     gender = Column(String)
-    
+
+    #One to Many RelationShip
+    movies = db.relationship('Movie', backref=db.backref('owner', cascade='all, delete'))
 
     def __init__(self, name,age,gender):
         self.name = name
@@ -60,18 +59,26 @@ class Actors(db.Model):
             }
 
 '''
-Movies
+                                            Movies
 
 '''
 class Movie(db.Model):
-    __tablename__ = 'Movies'
+    __tablename__ = 'Movie'
 
     id = Column(Integer, primary_key=True)
     title = Column(String)
     release_date = Column(Date)
-    def __init__(self, title):
+    def __init__(self, title ,release_date):
         self.title = title
-    
+        self.release_date = release_date
+
+
+    #One to Many RelationShip
+    owner_id = db.Column(db.Integer , db.ForeignKey('actor.id'), nullable=False)
+   
+
+
+
     def insert(self):
         db.session.add(self)
         db.session.commit()
