@@ -113,7 +113,7 @@ class TriviaTestCase(unittest.TestCase):
     #     self.assertEqual(data['success'], False)
     #     self.assertEqual(data['message'] ,'unprocessable')
 
-    # def post_movie(self):
+    # def test_post_movie(self):
     #     movie_before_add = len(Movie.query.all())
     #     response = self.client().post('/movies' , json=self.new_movie)
     #     data=json.loads(response.data)
@@ -129,7 +129,7 @@ class TriviaTestCase(unittest.TestCase):
     #     self.assertEqual(data['success'], False)
     #     self.assertEqual(data['message'] ,'unprocessable')
 
-    # def edit_actorss(self):
+    # def test_edit_actorss(self):
     #     new_actor={
     #         "name":"Arwaaaaaaaaaa"
     #         }
@@ -138,14 +138,14 @@ class TriviaTestCase(unittest.TestCase):
     #     self.assertEqual(response.status_code,200)
     #     self.assertEqual(data['success'],True)
 
-    # def failure_edit_actorss(self):
+    # def test_failure_edit_actorss(self):
     #     #Assume that patch fails when id is not found and we do not get a new body , mafish json asln myf34 23ml json={} keda de m3naha #3delha 5leha fadia
     #     response = self.client().post('/actors/99999' )
     #     self.assertEqual(response.status_code,404)
     #     self.assertEqual(data['success'],False)
     #     self.assertEqual(data['message'] ,'Resource is not found')
 
-    # def edit_moviess(self):
+    # def test_edit_moviess(self):
     #     new_movie={
     #         "title":"CloudyFilm"
     #         }
@@ -154,7 +154,7 @@ class TriviaTestCase(unittest.TestCase):
     #     self.assertEqual(response.status_code,200)
     #     self.assertEqual(data['success'],True)
 
-    # def failure_edit_moviess(self):
+    # def test_failure_edit_moviess(self):
     #     #Assume that patch fails when id is not found and we do not get a new body , mafish json asln myf34 23ml json={} keda de m3naha #3delha 5leha fadia
     #     response = self.client().post('/movies/99999' )
     #     self.assertEqual(response.status_code,404)

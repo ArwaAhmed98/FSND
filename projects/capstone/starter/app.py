@@ -5,11 +5,13 @@ from flask_cors import CORS
 
 from models import setup_db, Actor, Movie 
 
+db = SQLAlchemy()
 def create_app(test_config=None):
   # create and configure the app
   app = Flask(__name__)
   CORS(app)
   setup_db(app)
+  # db_drop_and_create_all()
   @app.after_request
   def after_request(response):
     response.headers.add('Access-Control-Allow-Headers','Content-Type,authorization,True')
@@ -38,22 +40,27 @@ def create_app(test_config=None):
       "Movies" : movies
     }),200
 
-  # @app.route('/actors/<int:actor_id>',methods=['DELETE'])
-  # def delete_actor(actor_id):
-  #   try:
-  #     x = Actor.query.order_by(Actor.id == actor_id).one_or_none()
-  #     if x is None:
-  #       abort(404)
-  #     x.delete()
-  #     return jsonify ({
-  #       'success' : True,
-  #       'actor_id' : x
-  #     }),200
-  #   except:
-  #     # db.session.rollback()
-  #     abort(422)
-  #   # finally:
-  #     # db.session.close()
+  @app.route('/actor/<int:actor_id>',methods=['DELETE'])
+  def delete_actor(actor_id):
+
+    try:
+      x = Actor.query.filter(Actor.id == actor_id).one_or_none()
+      print(x)
+      print(x.format())
+      if x is None:
+        abort(404)
+      x.delete()
+      print(x)
+      print(x.format())
+      return jsonify ({
+        'success' : True,
+        'actor_id' : actor_id
+      }),200
+    except:
+      # db.session.rollback()
+      abort(422)
+    # finally:
+      # db.session.close()
 
   # @app.route('/movies/<int:id>',methods=['DELETE'])
   # def delete_movie(id):
@@ -72,24 +79,24 @@ def create_app(test_config=None):
   #     abort(422)
 
   
-  @app.route('/actors' , methods=['POST'])
-  def  post_actor():
-    #fetch the body data from the request body 
-    body = request.get_json()
-    requested_name = body.get('name')
-    requested_age = body.get('age')
-    requested_gender = body.get('gender')
-    if requested_name is None:
-      abort(422)
-    #add the new data to the table as a new record
-    new_actor = Actor(name=requested_name,age=requested_age,gender=requested_gender)
-    new_actor.insert()
-    if body is None:
-      abort(422)
-    return jsonify ({
-      "success" : True,
-      "id" : new_actor.id
-    }),200
+  # @app.route('/actors' , methods=['POST'])
+  # def  post_actor():
+  #   #fetch the body data from the request body 
+  #   body = request.get_json()
+  #   requested_name = body.get('name')
+  #   requested_age = body.get('age')
+  #   requested_gender = body.get('gender')
+  #   if requested_name is None:
+  #     abort(422)
+  #   #add the new data to the table as a new record
+  #   new_actor = Actor(name=requested_name,age=requested_age,gender=requested_gender)
+  #   new_actor.insert()
+  #   if body is None:
+  #     abort(422)
+  #   return jsonify ({
+  #     "success" : True,
+  #     "id" : new_actor.id
+  #   }),200
 
 
 
@@ -177,7 +184,7 @@ def create_app(test_config=None):
   return app
 
 APP = create_app()
-# print(APP)
+# # # # print(APP)
 
 if __name__ == '__main__':
     APP.run(debug=True)
