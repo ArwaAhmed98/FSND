@@ -1,11 +1,11 @@
 import os
 from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy import Column, String, Integer, create_engine ,DateTime ,Date,db
+from sqlalchemy import Column, String, Integer,DateTime
 
 import json
 
 database_name = "castingagency"
-database_path = "postgres://{}/{}".format('localhost:5432', database_name)
+database_path = 'postgresql://postgres:1234@localhost:5432/castingagency'
 
 db = SQLAlchemy()
 
@@ -19,9 +19,10 @@ def setup_db(app, database_path=database_path):
     db.app = app
     db.init_app(app)
     db.create_all()
-def db_drop_and_create_all():
-    db.drop_all()
-    db.create_all()
+
+# def db_drop_and_create_all():
+#     db.drop_all()
+#     db.create_all()
 '''
                                                     Actors
 
@@ -35,7 +36,7 @@ class Actor(db.Model):
     gender = Column(String)
 
     #One to Many RelationShip
-    movies = db.relationship('Movie', backref=db.backref('owner', cascade='all, delete'))
+    movies = db.relationship('Movie', backref=db.backref('actor', cascade='all, delete'))
 
     def __init__(self, name,age,gender):
         self.name = name
@@ -70,16 +71,17 @@ class Movie(db.Model):
 
     id = Column(Integer, primary_key=True)
     title = Column(String)
-    release_date = Column(Date)
-    def __init__(self, title ,release_date):
-        self.title = title
-        self.release_date = release_date
-
+    release_date = Column(DateTime)
+    
 
     #One to Many RelationShip
-    owner_id = db.Column(db.Integer , db.ForeignKey('actor.id'), nullable=False)
+    actor_id = db.Column(db.Integer , db.ForeignKey('Actor.id'), nullable=False)
    
 
+    def __init__(self, title ,release_date,actor_id):
+        self.title = title
+        self.release_date = release_date
+        self.actor_id=actor_id
 
 
     def insert(self):
@@ -96,7 +98,8 @@ class Movie(db.Model):
         return {
         'id': self.id,
         'title': self.title,
-        'release_date' : self.release_date
+        'release_date' : self.release_date,
+        'actor_id' : self.actor_id
         }
 
-    db.create_all()
+# db.create_all()
