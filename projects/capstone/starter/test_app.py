@@ -25,16 +25,16 @@ class TriviaTestCase(unittest.TestCase):
             # create all tables
             self.db.create_all()
             #give the attribuites of the class any values
-        # self.new_actor={ 
-        #     'id' :1,
-        #     'name':'Adel Emam' ,
-        #     'age' :50,
-        #     'gender' : 'Male' }
-        # self.new_movie={ 
-        #     'id' :2,
-        #     'title':'aihaga' ,
-        #     'release_date' : "5-7-1998"
-        #     }
+            self.new_actor={ 
+                'id' :1,
+                'name':'Adel Emam' ,
+                'age' :50,
+                'gender' : 'Male' }
+            self.new_movie={ 
+                'id' :2,
+                'title':'aihaga' ,
+                'release_date' : "5-7-1998"
+                }
     
           
     def tearDown(self):
@@ -63,46 +63,47 @@ class TriviaTestCase(unittest.TestCase):
         self.assertTrue(data['Movies'])
 
 
-    # def delete_actor(self):
-    #     res=self.client().get('/actors/1')
-    #     data=json.loads(res.data)
-    #     self.assertEqual(res.status_code,200)
-    #     self.assertEqual(data['success'],True)
-    #     self.assertEqual(data['id'],1)
 
-    # def delete_actor_failure(self):
-    #     res=self.client().get('/actors/99999')
-    #     data=json.loads(res.data)
-    #     self.assertEqual(res.status_code,422)
-    #     self.assertEqual(data['success'],False)
-    #     self.assertEqual(data['message'] ,'unprocessable')
+    def test_delete_actor(self):
+        res=self.client().get('/actors/1')
+        data=json.loads(res.data)
+        self.assertEqual(res.status_code,200)
+        self.assertEqual(data['success'],True)
+        self.assertEqual(data['id'],1)
+
+    def test_delete_actor_failure(self):
+        res=self.client().get('/actors/99999')
+        data=json.loads(res.data)
+        self.assertEqual(res.status_code,422)
+        self.assertEqual(data['success'],False)
+        self.assertEqual(data['message'] ,'unprocessable')
    
     
     
-    # def delete_movie(self):
-    #     res=self.client().get('/actors/2')
-    #     data=json.loads(res.data)
-    #     self.assertEqual(res.status_code,200)
-    #     self.assertEqual(data['success'],True)
-    #     self.assertEqual(data['id'],2)
+    def test_delete_movie(self):
+        res=self.client().get('/actors/2')
+        data=json.loads(res.data)
+        self.assertEqual(res.status_code,200)
+        self.assertEqual(data['success'],True)
+        # self.assertEqual(data['id'],2)
 
-    # def delete_movie_failure(self):
+    def test_delete_movie_failure(self):
 
-    #     res=self.client().get('/actors/99999')
-    #     data=json.loads(res.data)
-    #     self.assertEqual(res.status_code,422)
-    #     self.assertEqual(data['success'],False)
-    #     self.assertEqual(data['message'] ,'unprocessable')
+        res=self.client().get('/actors/99999')
+        data=json.loads(res.data)
+        self.assertEqual(res.status_code,422)
+        self.assertEqual(data['success'],False)
+        self.assertEqual(data['message'] ,'unprocessable')
 
-    # def post_actor(self):
+    def test_post_actor(self):
 
-    #     actor_before_add = len(Actor.query.all())
-    #     response = self.client().post('/actors' , json=self.new_actor)
-    #     data=json.loads(response.data)
-    #     actor_after_add=len(Actor.query.all())
-    #     self.assertEqual(response.status_code,200)
-    #     self.assertEqual(data['success'],True)
-    #     self.assertTrue(actor_before_add - actor_after_add == 1)
+        actor_before_add = len(Actor.query.all())
+        response = self.client().post('/actors' , json=self.new_actor)
+        data=json.loads(response.data)
+        actor_after_add = len(Actor.query.all())
+        self.assertEqual(response.status_code,200)
+        self.assertEqual(data['success'],True)
+        self.assertTrue(actor_before_add - actor_after_add == 1)
 
     # def test_failure_add_actor(self):
   

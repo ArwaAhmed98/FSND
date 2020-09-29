@@ -2,7 +2,7 @@
 #pip install -r requirements.txt
 set FLASK_APP=app.py #change set to export if you are MacOS or Linux OS 
 
-flask run --reload
+#flask run --reload
 #py test_app.py #in order to run the file who is making unit testing for each endpoint
 
 
