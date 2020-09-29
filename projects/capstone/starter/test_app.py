@@ -4,7 +4,7 @@ from flask_sqlalchemy import SQLAlchemy
 from app import create_app
 from models import setup_db, Actor ,Movie
 
-print("jskjsdjdfjkfjsf")
+
 class TriviaTestCase(unittest.TestCase):
 
     """This class represents the trivia test case"""
@@ -19,7 +19,7 @@ class TriviaTestCase(unittest.TestCase):
         setup_db(self.app)
         # binds the app to the current context
         with self.app.app_context():
-            
+
             self.db = SQLAlchemy()
             self.db.init_app(self.app)
             # create all tables
@@ -35,7 +35,7 @@ class TriviaTestCase(unittest.TestCase):
         #     'title':'aihaga' ,
         #     'release_date' : "5-7-1998"
         #     }
-        # print('d;hdleldlllows')
+    
           
     def tearDown(self):
         """Executed after reach test"""
@@ -45,22 +45,22 @@ class TriviaTestCase(unittest.TestCase):
     TODO
     Write at least one test for each test for successful operation and for expected errors.
     """
-    def get_all_actors(self):
+    def test_get_all_actors(self):
 
     
         res=self.client().get('/actors')
         data=json.loads(res.data)
         self.assertEqual(res.status_code,200)
         self.assertEqual(data['success'],True)
-        self.assertTrue(len(data['Actor']))
+        self.assertTrue(len(data['Actors']))
 
 
-    def get_all_movies(self):
+    def test_get_all_movies(self):
         res=self.client().get('/movies')
         data=json.loads(res.data)
         self.assertEqual(res.status_code,200)
         self.assertEqual(data['success'],True)
-        self.assertTrue(data['movies'])
+        self.assertTrue(data['Movies'])
 
 
     # def delete_actor(self):
