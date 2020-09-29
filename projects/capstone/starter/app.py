@@ -38,38 +38,38 @@ def create_app(test_config=None):
       "Movies" : movies
     }),200
 
-  @app.route('/actors/<int:actor_id>',methods=['DELETE'])
-  def delete_actor(actor_id):
-    try:
-      x = Actor.query.filter_by(Actor.id == actor_id).one_or_none()
-      if x is None:
-        abort(404)
-     
-      x.delete()
-    
-       
-      return jsonify({
-        'success' : True,
-        'actor_id' : actor_id
-      }),200
-    except:
-      abort(422)
+  # @app.route('/actors/<int:actor_id>',methods=['DELETE'])
+  # def delete_actor(actor_id):
+  #   try:
+  #     x = Actor.query.order_by(Actor.id == actor_id).one_or_none()
+  #     if x is None:
+  #       abort(404)
+  #     x.delete()
+  #     return jsonify ({
+  #       'success' : True,
+  #       'actor_id' : x
+  #     }),200
+  #   except:
+  #     # db.session.rollback()
+  #     abort(422)
+  #   # finally:
+  #     # db.session.close()
 
-  @app.route('/movies/<int:id>',methods=['DELETE'])
-  def delete_movie(id):
-    try:
-      x=Movie.query.filter_by(Movie.id == id).one_or_none()
-      if x is None:
-        abort(404)
+  # @app.route('/movies/<int:id>',methods=['DELETE'])
+  # def delete_movie(id):
+  #   try:
+  #     x=Movie.query.filter_by(Movie.id == id).one_or_none()
+  #     if x is None:
+  #       abort(404)
     
-      x.delete()
+  #     x.delete()
       
-      return jsonify ({
-        "success" : True,
-        "id" : id
-      }),200
-    except:
-      abort(422)
+  #     return jsonify ({
+  #       "success" : True,
+  #       "id" : id
+  #     }),200
+  #   except:
+  #     abort(422)
 
   
   @app.route('/actors' , methods=['POST'])
