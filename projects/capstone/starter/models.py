@@ -18,7 +18,6 @@ def setup_db(app, database_path=database_path):
     app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
     db.app = app
     db.init_app(app)
-    # db.drop_all()
     db.create_all()
 
 # def db_drop_and_create_all():
@@ -36,10 +35,8 @@ class Actor(db.Model):
     age = Column(Integer)
     gender = Column(String)
 
-    movie = db.relationship("Movie", back_populates="actor")
-
     #One to Many RelationShip
-    # movies = db.relationship('Movie', backref=db.backref('actor', cascade='all, delete'))
+    movies = db.relationship('Movie', backref='movie' , cascade='all, delete')
 
     def __init__(self, name,age,gender):
         self.name = name
@@ -78,9 +75,7 @@ class Movie(db.Model):
     
 
     #One to Many RelationShip
-    actor_id = db.Column(Integer, db.ForeignKey('actor.id'))
-    actor = db.relationship("Actor", back_populates="movie")
-    # actor_id = db.Column(db.Integer , db.ForeignKey('Actor.id'), nullable=False)
+    actor_id = db.Column(db.Integer , db.ForeignKey('Actor.id'), nullable=False)
    
 
     def __init__(self, title ,release_date,actor_id):

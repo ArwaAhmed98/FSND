@@ -45,13 +45,13 @@ def create_app(test_config=None):
 
     try:
       x = Actor.query.filter(Actor.id == actor_id).one_or_none()
-      print(x)
-      print(x.format())
+      # print(x)
+      # print(x.format())
       if x is None:
         abort(404)
       x.delete()
-      print(x)
-      print(x.format())
+      # print(x)
+      # print(x.format())
       return jsonify ({
         'success' : True,
         'actor_id' : actor_id
@@ -62,125 +62,123 @@ def create_app(test_config=None):
     # finally:
       # db.session.close()
 
-  # @app.route('/movies/<int:id>',methods=['DELETE'])
-  # def delete_movie(id):
-  #   try:
-  #     x=Movie.query.filter_by(Movie.id == id).one_or_none()
-  #     if x is None:
-  #       abort(404)
+  @app.route('/movies/<int:id>',methods=['DELETE'])
+  def delete_movie(id):
+    try:
+      x=Movie.query.filter(Movie.id == id).one_or_none()
+      if x is None:
+        abort(404)
     
-  #     x.delete()
+      x.delete()
       
-  #     return jsonify ({
-  #       "success" : True,
-  #       "id" : id
-  #     }),200
-  #   except:
-  #     abort(422)
+      return jsonify ({
+        "success" : True,
+        "id" : id
+      }),200
+    except:
+      abort(422)
 
   
-  # @app.route('/actors' , methods=['POST'])
-  # def  post_actor():
-  #   #fetch the body data from the request body 
-  #   body = request.get_json()
-  #   requested_name = body.get('name')
-  #   requested_age = body.get('age')
-  #   requested_gender = body.get('gender')
-  #   if requested_name is None:
-  #     abort(422)
-  #   #add the new data to the table as a new record
-  #   new_actor = Actor(name=requested_name,age=requested_age,gender=requested_gender)
-  #   new_actor.insert()
-  #   if body is None:
-  #     abort(422)
-  #   return jsonify ({
-  #     "success" : True,
-  #     "id" : new_actor.id
-  #   }),200
+  @app.route('/actors' , methods=['POST'])
+  def  post_actor():
+    #fetch the body data from the request body 
+    body = request.get_json()
+    requested_name = body.get('name')
+    requested_age = body.get('age')
+    requested_gender = body.get('gender')
+    if requested_name is None:
+      abort(422)
+    #add the new data to the table as a new record
+    new_actor = Actor(name=requested_name,age=requested_age,gender=requested_gender)
+    new_actor.insert()
+    if body is None:
+      abort(422)
+    return jsonify ({
+      "success" : True,
+      "id" : new_actor.id
+    }),200
 
 
 
-  # @app.route('/movies' , methods=['POST'])
-  # def  post_movie():
+  @app.route('/movies' , methods=['POST'])
+  def  post_movie():
 
-  #   #fetch the body data from the request body 
+    #fetch the body data from the request body 
 
-  #   body = request.get_json()
-  #   requested_title = body.get('title')
-  #   requested_release_date = body.get('release_date')
-
-  #   #add the new data to the table as a new record
-  #   Movie(title=requested_title,release_date=requested_release_date).insert()
-  #   if body is None:
-  #     abort(422)
-  #   return jsonify ({
-  #     "success" : True,
-  #     "movies" : [Movie.format()]
-  #   }),200
-
-
-  # @app.route('/actors/<int:id>' , methods =['PATCH'])
-  # def edit_actors(id):
-  #   #fetch the body data from the request body 
-  #   body = request.get_json()
-  #   requested_name = body.get('name')
-  #   requested_age = body.get('age')
-  #   requested_gender = body.get('gender')
-  #   #add the new data to the table as a new record
-  #   to_be_updated_row=Actor.query.filter_by(Actor.id==id).one_or_none() #See if we have that id is in our Table ?
-  #   if  to_be_updated_row  is None:
-  #     abort(404) #id   is Not found , we do not have that record in our table
-  #   if ( requested_name or  requested_age or requested_gender ) is None:
-  #     abort(400) # Wrong Input
-  #   to_be_updated_row.name=requested_name
-  #   to_be_updated_row.age=requested_age
-  #   to_be_updated_row.gender=requested_gender
-  #   try:
-  #     to_be_updated_row.update()
-  #   except:
-  #     abort(422)
-  #   actors = Actor.query.filter_by(Actor.id==id).one_or_none()
-  #   if actors is None:
-  #     abort(404) #The Record is not found
-  #   return jsonify ({
-  #     "success" : True,
-  #     "Actors" : [Actor.format()]
-  #   }),200
+    body = request.get_json()
+    requested_title = body.get('title')
+    requested_release_date = body.get('release_date')
+    requested_actor_id = body.get('actor_id')
+    #add the new data to the table as a new record
+    new_movie = Movie(title=requested_title,release_date=requested_release_date,actor_id=requested_actor_id)
+    new_movie.insert()
+    if body is None:
+      abort(422)
+    return jsonify ({
+      "success" : True,
+      "movies" : new_movie.id
+    }),200
 
 
+  @app.route('/actors/<int:id>' , methods =['PATCH'])
+  def edit_actors(id):
+    #fetch the body data from the request body 
+    body = request.get_json()
+    requested_name = body.get('name')
+    requested_age = body.get('age')
+    requested_gender = body.get('gender')
+    #add the new data to the table as a new record
+    to_be_updated_row = Actor.query.filter(Actor.id == id).one_or_none() #See if we have that id is in our Table ?
+    if  to_be_updated_row  is None:
+      abort(404) #id   is Not found , we do not have that record in our table
+    if ( requested_name or  requested_age or requested_gender ) is None:
+      abort(400) # Wrong Input
+    to_be_updated_row.name = requested_name
+    to_be_updated_row.age = requested_age
+    to_be_updated_row.gender = requested_gender
+    try:
+      to_be_updated_row.update()
+    except:
+      abort(422)
+    actors = Actor.query.filter(Actor.id == id).one_or_none()
+    if actors is None:
+      abort(404) #The Record is not found
+    return jsonify ({
+      "success" : True,
+      "Actor" : to_be_updated_row.id
+    }),200
 
-  # @app.route('/movies/<int:id>' , methods =['PATCH'])
-  # def edit_movies(id):
-  #   #fetch the body data from the request body 
-  #   body = request.get_json()
-  #   requested_title = body.get('title')
-  #   requested_release_date = body.get('release_date')
-  
-  #   #add the new data to the table as a new record
-  #   to_be_updated_row=Movie.query.filter_by(Movie.id==id).one_or_none() #See if we have that id is in our Table ?
-  #   if  to_be_updated_row  is None:
-  #     abort(404) #id   is Not found , we do not have that record in our table
-  #   if ( requested_title or  requested_release_date  ) is None:
-  #     abort(400) # Wrong Input
-  #   to_be_updated_row.name=requested_title
-  #   to_be_updated_row.age=requested_release_date
 
-  #   try:
-  #     to_be_updated_row.update()
-  #   except:
-  #     abort(422)
-  #   movies = Movie.query.filter_by(Movie.id==id).one_or_none()
-  #   if movies is None:
-  #     abort(404) #The Record is not found
-  #   return jsonify ({
-  #     "success" : True,
-  #     "Movies" : [Movie.format()]
-  #   }),200
 
-  # @app.route('/')
-  # def index():
-  #   print("hellllllllllllo")
-  #   return 'hello'
+  @app.route('/movies/<int:id>' , methods =['PATCH'])
+  def edit_movies(id):
+    #fetch the body data from the request body 
+    body = request.get_json()
+    requested_title_n = body.get('title')
+    requested_release_date_n = body.get('release_date')
+    requested_actor_id_n = body.get('actor_id')
+    #add the new data to the table as a new record
+    to_be_updated_row_n=Movie.query.filter(Movie.id == id).one_or_none() #See if we have that id is in our Table ?
+    if  to_be_updated_row_n is None:
+      abort(404) #id   is Not found , we do not have that record in our table
+    if ( requested_title_n or  requested_release_date_n  ) is None:
+      abort(400) # Wrong Input
+    to_be_updated_row_n.title=requested_title_n
+    to_be_updated_row_n.release_date=requested_release_date_n
+    # to_be_updated_row_n.actor_id = requested_actor_id_n
+    try:
+      to_be_updated_row_n.update()
+    except:
+      abort(422)
+    movieys = Movie.query.filter(Movie.id==id).one_or_none()
+    if movieys is None:
+      abort(404) #The Record is not found
+    return jsonify ({
+      "success" : True,
+      "Movies" : to_be_updated_row_n.id
+    }),200
+
+
   return app
 
 APP = create_app()
