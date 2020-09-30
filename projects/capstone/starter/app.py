@@ -80,6 +80,7 @@ def create_app(test_config=None):
       abort(422)
 
   
+  
   @app.route('/actors' , methods=['POST'])
   def  post_actor():
     try:
@@ -128,18 +129,20 @@ def create_app(test_config=None):
   def edit_actors(id):
     #fetch the body data from the request body 
     body = request.get_json()
-    requested_name = body.get('name')
-    requested_age = body.get('age')
-    requested_gender = body.get('gender')
     #add the new data to the table as a new record
     to_be_updated_row = Actor.query.filter(Actor.id == id).one_or_none() #See if we have that id is in our Table ?
     if  to_be_updated_row  is None:
       abort(404) #id   is Not found , we do not have that record in our table
-    if ( requested_name or  requested_age or requested_gender ) is None:
-      abort(400) # Wrong Input
-    to_be_updated_row.name = requested_name
-    to_be_updated_row.age = requested_age
-    to_be_updated_row.gender = requested_gender
+    requested_name = body.get('name')
+    requested_age = body.get('age')
+    requested_gender = body.get('gender')
+    if requested_name is not None :
+          to_be_updated_row.name = requested_name
+    if requested_age is not None:
+          to_be_updated_row.age = requested_age
+    if requested_gender is not None:
+          to_be_updated_row.gender = requested_gender
+    
     try:
       to_be_updated_row.update()
     except:
@@ -158,17 +161,18 @@ def create_app(test_config=None):
   def edit_movies(id):
     #fetch the body data from the request body 
     body = request.get_json()
-    requested_title_n = body.get('title')
-    requested_release_date_n = body.get('release_date')
-    
-    #add the new data to the table as a new record
     to_be_updated_row_n=Movie.query.filter(Movie.id == id).one_or_none() #See if we have that id is in our Table ?
     if  to_be_updated_row_n is None:
-      abort(404) #id   is Not found , we do not have that record in our table
-    if ( requested_title_n or  requested_release_date_n  ) is None:
+          abort(404) #id   is Not found , we do not have that record in our table
+    requested_title_n = body.get('title')
+    requested_release_date_n = body.get('release_date')
+    #add the new data to the table as a new record
+    if ( requested_title_n and  requested_release_date_n  ) is None:
       abort(400) # Wrong Input
-    to_be_updated_row_n.title=requested_title_n
-    to_be_updated_row_n.release_date=requested_release_date_n
+    if requested_title_n is not None :   
+          to_be_updated_row_n.title=requested_title_n
+    if requested_release_date_n is not None:
+          to_be_updated_row_n.release_date=requested_release_date_n
     # to_be_updated_row_n.actor_id = requested_actor_id_n
     try:
       to_be_updated_row_n.update()

@@ -15,7 +15,7 @@ class TriviaTestCase(unittest.TestCase):
         self.app = create_app()
         self.client = self.app.test_client
         self.database_name = "castingagency"
-        self.database_path = "postgresql://postgres:1234@localhost:5432/castingagency"
+        self.database_path = "postgresql://postgres:123@localhost:5432/castingagency"
         setup_db(self.app)
         # binds the app to the current context
         with self.app.app_context():
@@ -27,12 +27,7 @@ class TriviaTestCase(unittest.TestCase):
             #give the attribuites of the class any values
             self.new_actor={"name" : "Nada" , "age" : 20 , "gender" : "Female" }
            
-            self.new_movie={ 
-               
-                'title':'aihaga' ,
-                'release_date' : "5-7-1998",
-                'actor_id' : 20
-                }
+            
     
           
     def tearDown(self):
@@ -117,10 +112,15 @@ class TriviaTestCase(unittest.TestCase):
 
 
     # def test_post_movie(self):
-       
-    #     response = self.client().post('/movies' , json=self.new_movie)
+    #     new_movie={ 
+               
+    #             'title':'aihaga' ,
+    #             'release_date': "5-7-1998",
+    #             'actor_id' : 1
+    #             }
+    #     response = self.client().post('/movies' , json=new_movie)
     #     data=json.loads(response.data)
-      
+        
     #     self.assertEqual(response.status_code,200)
     #     self.assertEqual(data['success'],True)
 
@@ -134,9 +134,9 @@ class TriviaTestCase(unittest.TestCase):
 
     def test_edit_actorss(self):
         new_actorr={
-            "name" : "Arwaa"
+            "name" : "maaai"
             }
-        response = self.client().patch('/actors/4' , json=new_actorr)
+        response = self.client().patch('/actors/2' , json=new_actorr)
         data=json.loads(response.data)
         self.assertEqual(response.status_code,200)
         self.assertEqual(data['success'],True)
@@ -145,28 +145,26 @@ class TriviaTestCase(unittest.TestCase):
         #Assume that patch fails when id is not found and we do not get a new body , mafish json asln myf34 23ml json={} keda de m3naha #3delha 5leha fadia
         response = self.client().patch('/actors/99' )
         data=json.loads(response.data)
-        self.assertEqual(response.status_code,500)
+        self.assertEqual(response.status_code,404)
         self.assertEqual(data['success'],False)
         # self.assertEqual(data['message'] ,'Resource i')
 
     def test_edit_moviess(self):
         new_moviie={
-            "title":"CloudyFilm"
+            "title":"ClouddddyFillllm"
             }
-        response = self.client().patch('/movies/4' , json=new_moviie)
+        
+        response = self.client().patch('/movies/3' , json=new_moviie)
         data=json.loads(response.data)
         self.assertEqual(response.status_code,200)
         self.assertEqual(data['success'],True)
 
     def test_failure_edit_moviess(self):
         #Assume that patch fails when id is not found and we do not get a new body , mafish json asln myf34 23ml json={} keda de m3naha #3delha 5leha fadia
-        response = self.client().patch('/movies/99' )
+        response = self.client().patch('/movies/99')
         data=json.loads(response.data)
-        self.assertEqual(response.status_code,500)
+        self.assertEqual(response.status_code,404)
         self.assertEqual(data['success'],False)
-
-
-
    
 # Make the tests conveniently executable
 if __name__ == "__main__":

@@ -5,7 +5,7 @@ from sqlalchemy import Column, String, Integer,DateTime
 import json
 
 database_name = "castingagency"
-database_path = 'postgresql://postgres:1234@localhost:5432/castingagency'
+database_path = 'postgresql://postgres:123@localhost:5432/castingagency'
 
 db = SQLAlchemy()
 
