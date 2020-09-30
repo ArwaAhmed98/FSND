@@ -4,6 +4,7 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
 
 from models import setup_db, Actor, Movie 
+# from .auth.auth import AuthError, requires_auth
 
 db = SQLAlchemy()
 def create_app(test_config=None):
@@ -115,7 +116,7 @@ def create_app(test_config=None):
     #add the new data to the table as a new record
     new_movie = Movie(title=requested_title,release_date=requested_release_date,actor_id=requested_actor_id)
     new_movie.insert()
-    if body is None:
+    if  body   is None:
       abort(422)
     return jsonify ({
       "success" : True,
@@ -180,6 +181,58 @@ def create_app(test_config=None):
       "success" : True,
       "Movies" : to_be_updated_row_n.id
     }),200
+
+      
+  ## Error Handling
+  '''
+  Example error handling for unprocessable entity
+  '''
+  @app.errorhandler(422)
+  def unprocessable(error):
+    return jsonify({
+                    "success": False, 
+                    "error": 422,
+                    "message": "unprocessable"
+                    }), 422
+
+
+  @app.errorhandler(404)
+  def not_found(error):
+    return jsonify({
+        "success": False, 
+        "error": 404,
+        "message": "resource not found"
+        }), 404
+
+
+  @app.errorhandler(401)
+  def Unauthorized(error):
+    return jsonify({
+        "success": False, 
+        "error": 401,
+        "message": "Unauthorized"
+        }), 401
+
+
+  @app.errorhandler(500)
+  def server_error(error):
+    return jsonify({
+        "success": False, 
+        "error": 500,
+        "message": "Internal Server Error"
+        }), 500
+    
+  # @app.errorhandler(AuthError)
+  # def handle_auth_error(ex):
+  #   response = jsonify(ex.error)
+  #   response.status_code = ex.status_code
+  #   return jsonify({
+  #       "sucess":False,
+  #       "error":response.status_code,
+  #       "message" :response
+      
+  #   }),response.status_code
+
 
 
   return app
