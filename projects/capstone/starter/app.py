@@ -40,7 +40,7 @@ def create_app(test_config=None):
       "Movies" : movies
     }),200
 
-  @app.route('/actor/<int:actor_id>',methods=['DELETE'])
+  @app.route('/actors/<int:actor_id>',methods=['DELETE'])
   def delete_actor(actor_id):
 
     try:
@@ -81,23 +81,26 @@ def create_app(test_config=None):
   
   @app.route('/actors' , methods=['POST'])
   def  post_actor():
-    #fetch the body data from the request body 
-    body = request.get_json()
-    requested_name = body.get('name')
-    requested_age = body.get('age')
-    requested_gender = body.get('gender')
-    if requested_name is None:
-      abort(422)
-    #add the new data to the table as a new record
-    new_actor = Actor(name=requested_name,age=requested_age,gender=requested_gender)
-    new_actor.insert()
-    if body is None:
-      abort(422)
-    return jsonify ({
-      "success" : True,
-      "id" : new_actor.id
-    }),200
+    try:
 
+      #fetch the body data from the request body 
+      body = request.get_json()
+      requested_name = body.get('name')
+      requested_age = body.get('age')
+      requested_gender = body.get('gender')
+      if  requested_name  is None:
+        abort(422)
+      #add the new data to the table as a new record
+      new_actor = Actor(name=requested_name,age=requested_age,gender=requested_gender)
+      new_actor.insert()
+      if body is None:
+        abort(422)
+      return jsonify ({
+        "success" : True,
+        "id" : new_actor.id
+      }),200
+    except:
+      abort(422)
 
 
   @app.route('/movies' , methods=['POST'])
@@ -156,7 +159,7 @@ def create_app(test_config=None):
     body = request.get_json()
     requested_title_n = body.get('title')
     requested_release_date_n = body.get('release_date')
-    requested_actor_id_n = body.get('actor_id')
+    
     #add the new data to the table as a new record
     to_be_updated_row_n=Movie.query.filter(Movie.id == id).one_or_none() #See if we have that id is in our Table ?
     if  to_be_updated_row_n is None:
