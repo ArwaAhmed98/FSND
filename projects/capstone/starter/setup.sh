@@ -28,7 +28,7 @@ export producer = "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6IkpqdzNFY2JZZzZGZ
 '''
 
 
-LINK TO SIGN IN FIRST TO THE  AUTH0 DOMAIN 
+#LINK TO SIGN IN FIRST TO THE  AUTH0 DOMAIN 
 https://dev-05gev6hk.us.auth0.com/authorize?response_type=token&client_id=muLQFzT17AKe4lsGXizMlD8udTJMCteL&redirect_uri=http://localhost:5000/login-results&audience=http://localhost:5000/&state=STATE
 
 
