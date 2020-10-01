@@ -151,13 +151,16 @@ class TriviaTestCase(unittest.TestCase):
 
     def test_edit_moviess(self):
         new_moviie={
-            "title":"ClouddddyFillllm"
-            }
+            "title":"ClouddddyFillllm",
+            # "release_date":"3-2-2222",
+            # "actor_id" : 1}
+        }
         
         response = self.client().patch('/movies/3' , json=new_moviie)
         data=json.loads(response.data)
         self.assertEqual(response.status_code,200)
         self.assertEqual(data['success'],True)
+
 
     def test_failure_edit_moviess(self):
         #Assume that patch fails when id is not found and we do not get a new body , mafish json asln myf34 23ml json={} keda de m3naha #3delha 5leha fadia

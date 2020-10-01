@@ -4,7 +4,11 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
 
 from models import setup_db, Actor, Movie 
-# from .auth.auth import AuthError, requires_auth
+
+import os
+import sys
+sys.path.append(os.getcwd())
+from auth.auth import AuthError, requires_auth
 
 db = SQLAlchemy()
 def create_app(test_config=None):
@@ -226,16 +230,16 @@ def create_app(test_config=None):
         "message": "Internal Server Error"
         }), 500
     
-  # @app.errorhandler(AuthError)
-  # def handle_auth_error(ex):
-  #   response = jsonify(ex.error)
-  #   response.status_code = ex.status_code
-  #   return jsonify({
-  #       "sucess":False,
-  #       "error":response.status_code,
-  #       "message" :response
+  @app.errorhandler(AuthError)
+  def handle_auth_error(ex):
+    response = jsonify(ex.error)
+    response.status_code = ex.status_code
+    return jsonify({
+        "sucess":False,
+        "error":response.status_code,
+        "message" :response
       
-  #   }),response.status_code
+    }),response.status_code
 
 
 
