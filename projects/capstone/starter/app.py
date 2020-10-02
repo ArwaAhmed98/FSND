@@ -24,7 +24,8 @@ def create_app(test_config=None):
     return response
   # db_drop_and_create_all()
   @app.route('/actors')
-  def get_all_actors():
+  @requires_auth('get:actors')
+  def get_all_actors(token):
     Actors = Actor.query.all()
     Actors = [actor.format() for actor in Actors]
     # a = []
@@ -37,7 +38,8 @@ def create_app(test_config=None):
     }),200
 
   @app.route('/movies')
-  def get_all_movies():
+  @requires_auth('get:movies')
+  def get_all_movies(token):
     movies= Movie.query.all()
     movies = [ movie.format() for movie in movies]
     return jsonify ({
@@ -46,7 +48,8 @@ def create_app(test_config=None):
     }),200
 
   @app.route('/actors/<int:actor_id>',methods=['DELETE'])
-  def delete_actor(actor_id):
+  @requires_auth('delete:actors')
+  def delete_actor(token,actor_id):
 
     try:
       x = Actor.query.filter(Actor.id == actor_id).one_or_none()
@@ -68,7 +71,8 @@ def create_app(test_config=None):
       # db.session.close()
 
   @app.route('/movies/<int:id>',methods=['DELETE'])
-  def delete_movie(id):
+  @requires_auth('delete:movies')
+  def delete_movie(token,id):
     try:
       x=Movie.query.filter(Movie.id == id).one_or_none()
       if x is None:
@@ -86,7 +90,8 @@ def create_app(test_config=None):
   
   
   @app.route('/actors' , methods=['POST'])
-  def  post_actor():
+  @requires_auth('post:actors')
+  def  post_actor(token):
     try:
 
       #fetch the body data from the request body 
@@ -110,27 +115,35 @@ def create_app(test_config=None):
 
 
   @app.route('/movies' , methods=['POST'])
-  def  post_movie():
+  @requires_auth('post:movies')
+  def  post_movie(token):
+        
+        
+        try:
+          
+          #fetch the body data from the request body 
 
-    #fetch the body data from the request body 
-
-    body = request.get_json()
-    requested_title = body.get('title')
-    requested_release_date = body.get('release_date')
-    requested_actor_id = body.get('actor_id')
-    #add the new data to the table as a new record
-    new_movie = Movie(title=requested_title,release_date=requested_release_date,actor_id=requested_actor_id)
-    new_movie.insert()
-    if  body   is None:
-      abort(422)
-    return jsonify ({
-      "success" : True,
-      "movies" : new_movie.id
-    }),200
+          body = request.get_json()
+          requested_title = body.get('title')
+          requested_release_date = body.get('release_date')
+          requested_actor_id = body.get('actor_id')
+          #add the new data to the table as a new record
+          new_movie = Movie(title=requested_title,release_date=requested_release_date,actor_id=requested_actor_id)
+          new_movie.insert()
+          if  body   is None:
+            abort(422)
+          return jsonify ({
+            "success" : True,
+            "movies" : new_movie.id
+          }),200
+        except:
+          
+          abort(422)
 
 
   @app.route('/actors/<int:id>' , methods =['PATCH'])
-  def edit_actors(id):
+  @requires_auth('patch:actors')
+  def edit_actors(token,id):
     #fetch the body data from the request body 
     body = request.get_json()
     #add the new data to the table as a new record
@@ -162,29 +175,27 @@ def create_app(test_config=None):
 
 
   @app.route('/movies/<int:id>' , methods =['PATCH'])
-  def edit_movies(id):
+  @requires_auth('patch:movies')
+  def edit_movies(token,id):
     #fetch the body data from the request body 
     body = request.get_json()
     to_be_updated_row_n=Movie.query.filter(Movie.id == id).one_or_none() #See if we have that id is in our Table ?
     if  to_be_updated_row_n is None:
           abort(404) #id   is Not found , we do not have that record in our table
-    requested_title_n = body.get('title')
-    requested_release_date_n = body.get('release_date')
+   
+    print("requested_title_n = ", body.get('title'))
+    print("requested_release_date_n =",  body.get('release_date'))
     #add the new data to the table as a new record
-    if ( requested_title_n and  requested_release_date_n  ) is None:
-      abort(400) # Wrong Input
-    if requested_title_n is not None :   
-          to_be_updated_row_n.title=requested_title_n
-    if requested_release_date_n is not None:
-          to_be_updated_row_n.release_date=requested_release_date_n
+    if body.get('title') is not None :   
+          to_be_updated_row_n.title=  body.get('title')
+    if body.get('release_date') is not None:
+          to_be_updated_row_n.release_date= body.get('release_date')
     # to_be_updated_row_n.actor_id = requested_actor_id_n
     try:
       to_be_updated_row_n.update()
     except:
       abort(422)
-    movieys = Movie.query.filter(Movie.id==id).one_or_none()
-    if movieys is None:
-      abort(404) #The Record is not found
+
     return jsonify ({
       "success" : True,
       "Movies" : to_be_updated_row_n.id
@@ -202,6 +213,13 @@ def create_app(test_config=None):
                     "error": 422,
                     "message": "unprocessable"
                     }), 422
+  @app.errorhandler(400)
+  def badrequest(error):
+        return jsonify({
+                        "success": False, 
+                        "error": 400,
+                        "message": "bad request"
+                        }), 400
 
 
   @app.errorhandler(404)
