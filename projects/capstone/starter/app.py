@@ -24,15 +24,17 @@ def create_app(test_config=None):
           
       @app.route('/actors')
       @requires_auth('get:actors')
-      def get_all_actors(token):
-        Actors = Actor.query.all()
-        print(Actors)
-        Actors = [actor.format() for actor in Actors]
-        return jsonify({
-          "success": True,
-          "Actors": Actors
-        }), 200
-
+      def get_all_actors(payload):
+        try:
+          Actors = Actor.query.all()
+          Actors = [actor.format() for actor in Actors]
+          return jsonify({
+            "success": True,
+            "Actors": Actors
+          }), 200
+        except:
+          abort(401)
+          
       @app.route('/movies')
       @requires_auth('get:movies')
       def get_all_movies(token):
@@ -114,7 +116,7 @@ def create_app(test_config=None):
               abort(422)
               
       @app.route('/actors/<int:id>', methods =['PATCH'])
-      @requires_auth('patch:actors')
+      @requires_auth('edit:actors')
       def edit_actors(token,id):    
             body = request.get_json()   #fetch the body data from the request body 
             to_be_updated_row = Actor.query.filter(Actor.id == id).one_or_none() #See if we have that id is in our Table ?
@@ -140,20 +142,19 @@ def create_app(test_config=None):
               "success": True,
               "Actor": to_be_updated_row.id
             }), 200
+            
       @app.route('/movies/<int:id>', methods =['PATCH'])
-      @requires_auth('patch:movies')
+      @requires_auth('edit:movies')
       def edit_movies(token,id):
         body = request.get_json()  #fetch the body data from the request body 
         to_be_updated_row_n=Movie.query.filter(Movie.id == id).one_or_none() #See if we have that id is in our Table ?
         if  to_be_updated_row_n is None:
               abort(404) #id   is Not found , we do not have that record in our table
-        print("requested_title_n = ", body.get('title'))
-        print("requested_release_date_n =",  body.get('release_date'))
         #add the new data to the table as a new record
         if body.get('title') is not None :   
               to_be_updated_row_n.title=  body.get('title')
         if body.get('release_date') is not None:
-              to_be_updated_row_n.release_date= body.get('release_date')
+              to_be_updated_row_n.release_date = body.get('release_date')
         # to_be_updated_row_n.actor_id = requested_actor_id_n
         try:
           to_be_updated_row_n.update()
