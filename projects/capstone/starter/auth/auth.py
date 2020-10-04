@@ -23,7 +23,6 @@ class AuthError(Exception):
 
 
 # Auth Header
-
 def get_token_auth_header():
     """Obtains the Access Token from the Authorization Header
     """

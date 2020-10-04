@@ -147,7 +147,6 @@ def create_app(test_config=None):
         if body.get('release_date') is not None:
             to_be_updated_row_n.release_date = body.get('release_date')
 
-        # to_be_updated_row_n.actor_id = requested_actor_id_n
 
         try:
             to_be_updated_row_n.update()
