@@ -23,7 +23,10 @@ def create_app(test_config=None):
         response.headers.add('Acess-Control-Allow-Methods',
                              'GET,POST,PATCH,DELETE,OPTIONS')
         return response
-
+    @app.route('/')
+    def index():
+        return ("Congrats")
+    
     @app.route('/actors')
     @requires_auth('get:actors')
     def get_all_actors(payload):
